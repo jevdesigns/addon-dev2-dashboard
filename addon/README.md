@@ -23,7 +23,7 @@ This add-on provides a powerful React-based dashboard that integrates seamlessly
 1. Navigate to the **Add-on Store** in your Home Assistant instance
 2. Click the menu (three dots) in the top right corner
 3. Select **Repositories**
-4. Add this repository URL: `https://github.com/YOUR_USERNAME/addon-dev2-dashboard`
+4. Add this repository URL: `https://github.com/jevdesigns/addon-dev2-dashboard`
 5. Find "Dev2 React Dashboard" in the add-on list
 6. Click **Install**
 
@@ -68,7 +68,7 @@ The dashboard will automatically connect to your Home Assistant instance using i
 ## Support
 
 For issues, questions, or feature requests, please visit:
-- [GitHub Issues](https://github.com/YOUR_USERNAME/addon-dev2-dashboard/issues)
+- [GitHub Issues](https://github.com/jevdesigns/addon-dev2-dashboard/issues)
 - [Home Assistant Community Forum](https://community.home-assistant.io/)
 
 ## License

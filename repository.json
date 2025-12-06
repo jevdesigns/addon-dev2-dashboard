@@ -1,0 +1,13 @@
+{
+  "name": "Dev2 React Dashboard Add-on Repository",
+  "url": "https://github.com/YOUR_USERNAME/addon-dev2-dashboard",
+  "maintainers": [
+    "YOUR_USERNAME"
+  ],
+  "addons": {
+    "dev2-react-dashboard": {
+      "repository": "https://github.com/YOUR_USERNAME/addon-dev2-dashboard",
+      "tag": "latest"
+    }
+  }
+}

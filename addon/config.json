@@ -26,5 +26,5 @@
   },
   "ports": {},
   "ports_description": {}
-  ,"image": "ghcr.io/jevdesigns/addon-dev2-react-dashboard:latest"
+  ,"image": "ghcr.io/jevdesigns/addon-dev2-react-dashboard:v1.0.0"
 }

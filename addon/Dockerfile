@@ -7,8 +7,9 @@ WORKDIR /build
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production && npm install vite @vitejs/plugin-react terser
+# Install dependencies (use npm install so build works without a committed package-lock.json)
+# We need devDependencies for the build step (vite, plugins), so install all deps.
+RUN npm install
 
 # Copy source files
 COPY src ./src

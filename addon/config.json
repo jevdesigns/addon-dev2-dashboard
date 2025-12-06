@@ -25,6 +25,5 @@
     "log_level": "list(debug|info|warning|error)?"
   },
   "ports": {},
-  "ports_description": {},
-  "image": "ghcr.io/{arch}-dev2-react-dashboard"
+  "ports_description": {}
 }

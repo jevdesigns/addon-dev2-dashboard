@@ -1,0 +1,297 @@
+# Quick Reference - Lovelace Custom Card
+
+## 🚀 Quick Start (3 Steps!)
+
+### Step 1: Register Resource
+Home Assistant: Settings > Dashboards > Resources > Create Resource
+```
+URL: /local/lovelace-cards/dev2-react-dashboard.js
+Type: JavaScript Module
+```
+
+### Step 2: Add to Dashboard
+Edit dashboard view, add card:
+```yaml
+type: custom:dev2-react-dashboard
+title: Dev2 Dashboard
+```
+
+### Step 3: Done!
+Navigate to dashboard and see your React app!
+
+─────────────────────────────────────────────────────────────────────────────────
+
+## 📋 Build & Deploy Commands
+
+### Build the Lovelace card
+```powershell
+npm run build:lovelace
+```
+**Output:** `dist/dev2-react-dashboard.umd.js` (~1.12 MB)
+
+### Deploy to Home Assistant
+```powershell
+npm run deploy:lovelace
+```
+**Destination:** `Z:\www\lovelace-cards\dev2-react-dashboard.js`
+
+### Build + Deploy
+```powershell
+npm run build:lovelace && npm run deploy:lovelace
+```
+
+### After deploying:
+1. Hard refresh browser: `Ctrl+Shift+R`
+2. Or reload Home Assistant frontend
+
+─────────────────────────────────────────────────────────────────────────────────
+
+## 💡 Using hass in Components
+
+```javascript
+import { useHass } from '../contexts/HassContext'
+
+export function MyComponent() {
+  const hass = useHass()
+  
+  // Read entity state
+  const light = hass.states['light.kitchen']
+  console.log(light.state)  // 'on' or 'off'
+  
+  // Call a service
+  hass.callService('light', 'turn_on', {
+    entity_id: 'light.kitchen',
+    brightness_pct: 80
+  })
+}
+```
+
+─────────────────────────────────────────────────────────────────────────────────
+
+## 📁 Key Files & Paths
+```powershell
+Get-Item 'Z:\www\d522-react\my-react-panel.js'
+```
+
+### 3. Configure Home Assistant
+Edit `configuration.yaml` (usually at `C:\Users\<user>\AppData\Roaming\homeassistant\configuration.yaml` on Windows):
+
+```yaml
+panel_custom:
+  - name: dev2_react_panel
+    sidebar_title: dev2
+    sidebar_icon: mdi:developer-board
+    url_path: dev2-react
+    module_url: /local/my-react-panel.js
+    embed_iframe: true
+```
+
+**OR copy from file:**
+```powershell
+Get-Content 'D:\HA\522-react\docs\configuration.yaml.snippet'
+```
+
+### 4. Restart Home Assistant
+- Via UI: Settings → System → Restart
+- Via CLI: `sudo systemctl restart homeassistant`
+
+---
+
+## Ongoing Development
+
+### Watch for changes and rebuild
+```powershell
+Push-Location 'D:\HA\522-react'
+npm run build:panel -- --watch
+Pop-Location
+```
+
+Then re-deploy after each build:
+```powershell
+npm run deploy:panel
+```
+
+### Or manually rebuild and deploy
+```powershell
+# In D:\HA\522-react
+npm run build:panel
+npm run deploy:panel
+```
+
+### Run dev server for testing
+```powershell
+npm run dev
+# Open http://localhost:5173
+```
+
+---
+
+## Testing & Debugging
+
+### Browser console commands
+After opening the dev2 panel in HA, open DevTools (F12 → Console):
+
+```javascript
+// Check connection status (should be 1 = OPEN)
+window.d522_debug.getStatus()
+
+// Force reconnect
+window.d522_debug.reconnect()
+
+// Export all stored data
+window.d522_debug.exportAll()
+
+// Get connection object
+window.d522_debug.getConn()
+```
+
+### Check deployment
+```powershell
+# Verify bundle deployed
+Get-Item 'Z:\www\d522-react\my-react-panel.js' | Select-Object Length
+
+# List all files in HA www folder
+Get-ChildItem 'Z:\www\d522-react\' -Recurse
+```
+
+### Test service calls (in browser console)
+```javascript
+// Toggle a light
+window.hass.callService('light', 'toggle', {entity_id: 'light.bedroom'})
+  .then(() => console.log('Success'))
+  .catch(e => console.error('Failed:', e))
+
+// Set climate temperature
+window.hass.callService('climate', 'set_temperature', {
+  entity_id: 'climate.downstairs',
+  temperature: 72
+})
+```
+
+---
+
+## Troubleshooting Commands
+
+### Clear browser cache and reload
+```
+Ctrl+Shift+Del  (Open Clear Browsing Data)
+Select "All time" and check "Cookies and other site data"
+Click Clear
+Then Ctrl+Shift+R to hard refresh
+```
+
+### Check HA logs for errors
+Settings → System → Logs → Search for "panel_custom" or "my-react-panel"
+
+### Verify configuration.yaml syntax
+Use an online YAML validator: https://www.yamllint.com/
+
+### Monitor network requests
+DevTools → Network → Reload → Look for:
+- `my-react-panel.js` should load (1.2 MB)
+- WebSocket connection should be established (WS line item)
+- No 404 errors
+
+---
+
+## Development Workflows
+
+### Option 1: Quick iteration (Recommended)
+```powershell
+# Terminal 1: Watch and auto-rebuild panel
+npm run build:panel -- --watch
+
+# Terminal 2: Rebuild and deploy after each change
+# (manual, or use File Watcher)
+npm run deploy:panel
+
+# Then test in HA - hard refresh (Ctrl+Shift+R) to see changes
+```
+
+### Option 2: Full cycle (Single command)
+```powershell
+npm run build:panel
+npm run deploy:panel
+# Hard refresh in HA browser (Ctrl+Shift+R)
+```
+
+### Option 3: Dev server with dev panel (Alternative)
+```powershell
+npm run dev
+# Then add to configuration.yaml:
+# panel_iframe:
+#   d522_dev_server:
+#     title: 'D522 Dev'
+#     url: 'http://192.168.1.50:5173'
+#     icon: 'mdi:monitor-dashboard'
+# Restart HA and click the dev server panel
+```
+
+---
+
+## File Locations
+
+| File | Purpose | Location |
+|------|---------|----------|
+| **Source** | React code | `D:\HA\522-react\src\` |
+| **Build output** | Compiled bundle | `D:\HA\522-react\dist\` |
+| **Deployed bundle** | HA serves this | `Z:\www\d522-react\my-react-panel.js` |
+| **Config** | Vite panel config | `D:\HA\522-react\vite.panel.config.js` |
+| **Docs** | Guides & examples | `D:\HA\522-react\docs\` |
+
+---
+
+## Common Issues & Fixes
+
+| Issue | Solution |
+|-------|----------|
+| Panel not in sidebar after restart | Check YAML syntax, look at HA logs, try 2nd restart |
+| WebSocket connection fails | Verify token, check firewall, ensure HA WebSocket is enabled |
+| Service calls fail silently | Verify entity exists in HA, test in Developer Tools first |
+| Panel is slow/laggy | Reduce history size, disable Charts, check HA database |
+| Bundle doesn't update | Hard refresh (Ctrl+Shift+R), clear browser cache |
+
+---
+
+## Useful HA Developer Tools
+
+Inside HA, navigate to: **Settings → Developer Tools**
+
+- **States** — See all entities and their current state
+- **Services** — Test calling services (lights, climate, etc.)
+- **Events** — Watch real-time state_changed events
+- **Logs** — Check for errors and warnings
+
+---
+
+## NPM Scripts Reference
+
+```powershell
+npm run dev           # Start Vite dev server (localhost:5173)
+npm run build         # Build standard app (to dist/)
+npm run build:panel   # Build panel bundle (dist/my-react-panel.js)
+npm run deploy:panel  # Copy panel bundle to HA www folder
+npm run deploy        # Build + deploy standard app
+npm run sync          # Deploy existing build without rebuilding
+npm run build:sync    # Build + sync
+npm run src-watch     # Watch src/ and rebuild on changes
+npm run build:watch   # Continuous vite build watch
+npm run dev:sync      # Dev server + src-watch in parallel
+npm run preview       # Preview production build
+npm run store-token   # Interactively set VITE_HA_TOKEN in .env
+```
+
+---
+
+## Key Documentation Files
+
+- **`README.md`** — Project overview and all workflows
+- **`docs/MIGRATION_COMPLETE.md`** — What was implemented (this summary)
+- **`docs/TESTING_CHECKLIST.md`** — Complete testing guide
+- **`docs/SERVICE_CALLS.md`** — API reference for calling HA services
+- **`docs/configuration.yaml.snippet`** — Ready-to-paste HA config
+
+---
+
+**Last updated:** December 4, 2025  
+**Status:** ✅ Production Ready

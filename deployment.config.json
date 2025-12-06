@@ -1,0 +1,98 @@
+{
+  "deployment": {
+    "name": "dev2-react-dashboard",
+    "version": "1.0.0",
+    "description": "React Dashboard for Home Assistant - Lovelace Custom Card",
+    "author": "Your Name",
+    "lastDeployed": "2024-01-01T00:00:00Z"
+  },
+  "build": {
+    "command": "npm run build:lovelace",
+    "sourceEntry": "src/lovelace-card.jsx",
+    "outputFormat": "umd",
+    "minify": true,
+    "sourceMap": false
+  },
+  "targets": {
+    "lovelace": {
+      "enabled": true,
+      "path": "Z:\\www\\lovelace-cards",
+      "bundleFileName": "dev2-react-dashboard.js",
+      "assetsFolder": "assets",
+      "createIfNotExists": true,
+      "backupOnDeploy": false,
+      "cacheBusting": {
+        "enabled": true,
+        "method": "version-query",
+        "versionFile": "dist/.deployment-version"
+      }
+    },
+    "addon": {
+      "enabled": false,
+      "description": "Home Assistant Add-on (Enable for add-on development)",
+      "buildCommand": "npm run build:addon",
+      "deployCommand": "npm run deploy:addon",
+      "dockerRebuild": false,
+      "autoWatch": true
+    }
+  },
+  "watcher": {
+    "enabled": true,
+    "watchPath": "src",
+    "ignorePatterns": [
+      "node_modules",
+      ".git",
+      "dist",
+      ".DS_Store"
+    ],
+    "debounceMs": 1000,
+    "autoDeployOnChange": true,
+    "logLevel": "info"
+  },
+  "homeAssistant": {
+    "resourceUrl": "/local/lovelace-cards/dev2-react-dashboard.js",
+    "configYamlPath": "Z:\\configuration.yaml",
+    "updateConfigOnDeploy": false,
+    "requiresRestart": false,
+    "cacheBustingParamName": "v"
+  },
+  "notifications": {
+    "onSuccess": true,
+    "onError": true,
+    "logDeployments": true,
+    "deploymentLogFile": "dist/.deployment-log"
+  },
+  "development": {
+    "hardRefreshInstructions": "Hard refresh Home Assistant: Ctrl+Shift+R (Chrome) or Cmd+Shift+R (Safari)",
+    "testUrl": "http://your-ha-ip:8123",
+    "enableSourceMaps": false,
+    "verboseLogging": false
+  },
+  "scripts": {
+    "build": "npm run build:lovelace",
+    "deploy": "npm run deploy:watch",
+    "buildAndDeploy": "npm run build:lovelace && npm run deploy:lovelace"
+  },
+  "assets": {
+    "chunkSplitting": {
+      "vendor": [
+        "react",
+        "react-dom",
+        "@mui/material",
+        "recharts"
+      ]
+    },
+    "excludeFromBundle": [
+      "node_modules",
+      ".env",
+      ".env.local"
+    ]
+  },
+  "notes": {
+    "1": "This configuration file centralizes all deployment settings",
+    "2": "Update paths to match your Home Assistant setup",
+    "3": "Enable cacheBusting to force client refreshes after deployment",
+    "4": "Use npm run deploy:watch for automated file watching and deployment",
+    "5": "Hard refresh Home Assistant (Ctrl+Shift+R) after deploying new versions"
+  }
+}

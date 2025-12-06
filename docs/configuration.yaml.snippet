@@ -1,0 +1,28 @@
+# Home Assistant Configuration Snippet
+# Add this to your configuration.yaml file, then restart Home Assistant
+
+panel_custom:
+  - name: dev2_react_panel
+    sidebar_title: dev2
+    sidebar_icon: mdi:developer-board
+    url_path: dev2-react
+    module_url: /local/my-react-panel.js
+    embed_iframe: true
+
+# Additional optional settings:
+# - 'embed_iframe: true' (RECOMMENDED): Embeds the panel in an iframe to isolate
+#   the React app from HA's native Lit-based components and prevent conflicts.
+#   Useful when the React app has many dependencies or uses Web Components.
+#
+# - 'sidebar_title': Appears in the HA left sidebar.
+# - 'sidebar_icon': Material Design Icon (mdi:*) or hass icon code.
+# - 'url_path': The unique URL path for your panel (e.g., /dev/dev2-react).
+# - 'module_url': The path to the JavaScript bundle in the HA www/ directory
+#   (served at /local/ by HA).
+
+# After adding this and restarting HA:
+# 1. Restart Home Assistant (required to load new panel_custom entries).
+# 2. Look for 'dev2' in the left sidebar.
+# 3. Click it to open the React dashboard.
+# 4. The panel should authenticate automatically using the HA session
+#    and receive the 'hass' object with access to entity states and services.

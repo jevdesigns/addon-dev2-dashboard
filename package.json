@@ -1,0 +1,50 @@
+{
+  "name": "d522-react-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:sync": "npm run build && npm run sync",
+    "build:watch": "vite build --watch",
+    "src-watch": "npx chokidar \"src/**\" -c \"npm run build:sync\"",
+    "preview": "vite preview --port 5173",
+    "build:panel": "vite build --config vite.panel.config.js",
+    "deploy:panel": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy-panel.ps1",
+    "build:lovelace": "vite build --config vite.lovelace.config.js",
+    "deploy:lovelace": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy-lovelace.ps1",
+    "build:addon": "vite build --config vite.addon.config.js",
+    "deploy:addon": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy-addon.ps1",
+    "deploy:watch": "node ./scripts/deploy-watcher.js",
+    "deploy": "powershell -NoProfile -ExecutionPolicy Bypass -File ./deploy-atomic.ps1 -ForceBuild",
+    "sync": "powershell -NoProfile -ExecutionPolicy Bypass -File ./deploy-atomic.ps1",
+    "publish-server": "node ./tools/publish-server.js",
+    "sync:watch": "npx chokidar 'dist/**' -c \"npm run sync\"",
+    "dev:sync": "concurrently \"npm run dev\" \"npm run sync:watch\"",
+    "watch:dev-sync": "powershell -NoProfile -ExecutionPolicy Bypass -File ./watch-and-sync.ps1 -Mode dev-sync",
+    "store-token": "powershell -NoProfile -ExecutionPolicy Bypass -File ./store-token.ps1"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^5.14.0",
+    "@mui/material": "^5.14.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.4",
+    "localforage": "^1.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.6.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.22",
+    "chokidar": "^3.5.3",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^8.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "terser": "^5.44.1",
+    "vite": "^5.0.0"
+  }
+}

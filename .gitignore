@@ -1,0 +1,18 @@
+.env
+node_modules/
+dist/
+.vscode/
+/.idea/
+
+# Additional ignores
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+build/
+addon/app/
+npm-debug.log
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+*.tgz

@@ -1,0 +1,34 @@
+name: Upload add-on ZIP to Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to upload to'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  upload-zip:
+    name: Upload ZIP to GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure ZIP exists
+        run: |
+          if [ ! -f ./addon-dev2-dashboard.zip ]; then
+            echo "ZIP file not found in repository root: addon-dev2-dashboard.zip" >&2
+            exit 1
+          fi
+
+      - name: Create or get release and upload asset
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          files: |
+            addon-dev2-dashboard.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
